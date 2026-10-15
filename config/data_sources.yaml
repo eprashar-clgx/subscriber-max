@@ -1,0 +1,29 @@
+# Central registry of BigQuery tables used by subscriber-max.
+# SQL templates reference these as {{ sources.<key> }} and {{ outputs.<key> }}.
+
+gcp:
+  billing_project: clgx-gis-app-dev-06e3
+  output_dataset: clgx-gis-app-dev-06e3.work_eprashar
+
+sources:
+  # Census 2020 state boundaries (cols: state_fips, abbrev, state_name, geometry)
+  states: clgx-gis-app-dev-06e3.teu_site_similarity.boundaries_states_2020
+  # Census 2020 block boundaries (cols: GEOID (15-char), STATEFP, geom); ~8.2M rows, unclustered
+  census_blocks: clgx-gis-app-dev-06e3.boundary.census_block
+
+  # Cotality address universe (ADDRESS_ID, CLIP, FIPS_STATE_CODE, ...)
+  cotality_address: clgx-idap-bigquery-prd-a990.edr_ent_property_fulfillment_hist.address_connect_dsf
+  # Cotality firmographics, left-joined to address on address_id
+  cotality_firmographics: clgx-idap-bigquery-prd-a990.edr_ent_property_firmographics.vw_edr_firmographics_enterprise
+
+  # FCC BDC fixed broadband availability, split by technology (identical schemas)
+  fcc_fiber: clgx-idap-bigquery-prd-a990.edr_ent_common_reference_ext.fcc_fiber_fixed_broadband
+  fcc_copper: clgx-idap-bigquery-prd-a990.edr_ent_common_reference_ext.fcc_copper_fixed_broadband
+  fcc_cable: clgx-idap-bigquery-prd-a990.edr_ent_common_reference_ext.fcc_cable_fixed_broadband
+
+# Output table names, created in gcp.output_dataset (consumed by CARTO)
+outputs:
+  state_location_comparison: sm_state_location_comparison
+  block_location_comparison: sm_block_location_comparison
+  block_provider_detail: sm_block_provider_detail
+  address_firmographics: sm_address_firmographics
